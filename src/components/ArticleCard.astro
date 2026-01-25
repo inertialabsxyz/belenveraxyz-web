@@ -30,29 +30,36 @@ const {
 const imageUrl = image || `https://picsum.photos/seed/${slug}/800/600`;
 ---
 
-<a href={`/article/${slug}`} class:list={["article-card", { featured }]}>
+<div class:list={["article-card", { featured }]}>
     <span class="article-card-category">{category}</span>
-    <div class="article-card-image">
-        <Image
-            src={imageUrl}
-            alt={title}
-            width={800}
-            height={600}
-            loading="lazy"
-            decoding="async"
-        />
-    </div>
-    <div class="article-card-content">
-        <h2 class="article-card-title">{title}</h2>
-        {excerpt && <p class="article-card-excerpt">{excerpt}</p>}
-        {
-            tags && tags.length > 0 && (
-                <div class="article-card-tags">
-                    {tags.map((tag) => (
-                        <span class="article-card-tag">{tag.title}</span>
-                    ))}
-                </div>
-            )
-        }
-    </div>
-</a>
+    <a href={`/article/${slug}`} class="article-card-link">
+        <div class="article-card-image">
+            <Image
+                src={imageUrl}
+                alt={title}
+                width={800}
+                height={600}
+                loading="lazy"
+                decoding="async"
+            />
+        </div>
+        <div class="article-card-content">
+            <h2 class="article-card-title">{title}</h2>
+            {excerpt && <p class="article-card-excerpt">{excerpt}</p>}
+        </div>
+    </a>
+    {
+        tags && tags.length > 0 && (
+            <div class="article-card-tags">
+                {tags.map((tag) => (
+                    <a
+                        href={`/tag/${tag.slug.current}`}
+                        class="article-card-tag"
+                    >
+                        {tag.title}
+                    </a>
+                ))}
+            </div>
+        )
+    }
+</div>

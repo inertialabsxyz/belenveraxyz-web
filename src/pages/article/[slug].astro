@@ -132,9 +132,19 @@ const bodyHtml = article.body
             {
                 article.tags && article.tags.length > 0 && (
                     <div class="article-tags">
-                        {article.tags.map((tag: { title: string }) => (
-                            <span class="article-tag">{tag.title}</span>
-                        ))}
+                        {article.tags.map(
+                            (tag: {
+                                title: string;
+                                slug: { current: string };
+                            }) => (
+                                <a
+                                    href={`/tag/${tag.slug.current}`}
+                                    class="article-tag"
+                                >
+                                    {tag.title}
+                                </a>
+                            ),
+                        )}
                     </div>
                 )
             }

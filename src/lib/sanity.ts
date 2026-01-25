@@ -124,7 +124,8 @@ export async function getArticlesByCategoryPaginated(
         publishedAt,
         category,
         mainImage,
-        "author": author->name
+        "author": author->name,
+        "tags": tags[]->{ title, slug }
       }
     `,
       { category, start, end },
@@ -148,6 +149,50 @@ export async function getCategories() {
   return client.fetch(`
     array::unique(*[_type == "article"].category)
   `);
+}
+
+export async function getArticlesByTagPaginated(
+  tagSlug: string,
+  page: number = 1,
+  pageSize: number = 10,
+) {
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+
+  const [articles, total, tag] = await Promise.all([
+    client.fetch(
+      `
+      *[_type == "article" && $tagSlug in tags[]->slug.current] | order(publishedAt desc) [$start...$end] {
+        _id,
+        title,
+        slug,
+        excerpt,
+        publishedAt,
+        category,
+        mainImage,
+        "author": author->name,
+        "tags": tags[]->{ title, slug }
+      }
+    `,
+      { tagSlug, start, end },
+    ),
+    client.fetch(
+      `count(*[_type == "article" && $tagSlug in tags[]->slug.current])`,
+      { tagSlug },
+    ),
+    client.fetch(`*[_type == "tag" && slug.current == $tagSlug][0]{ title }`, {
+      tagSlug,
+    }),
+  ]);
+
+  return {
+    articles,
+    total,
+    page,
+    pageSize,
+    totalPages: Math.ceil(total / pageSize),
+    tagTitle: tag?.title || tagSlug,
+  };
 }
 
 export async function getRevistas() {

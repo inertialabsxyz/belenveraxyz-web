@@ -1,0 +1,82 @@
+---
+export const prerender = false;
+
+import Layout from "../../layouts/Layout.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import Pagination from "../../components/Pagination.astro";
+import { getArticlesByTagPaginated, urlFor } from "../../lib/sanity";
+
+const { slug } = Astro.params;
+
+const pageParam = Astro.url.searchParams.get("page");
+const currentPage = Math.max(1, parseInt(pageParam || "1", 10) || 1);
+
+const { articles, totalPages, tagTitle } = await getArticlesByTagPaginated(
+    slug || "",
+    currentPage,
+    10,
+);
+---
+
+<Layout title={`${tagTitle} — Efímera`}>
+    <div class="tag-header">
+        <h1 class="tag-title">{tagTitle}</h1>
+    </div>
+
+    {
+        articles.length > 0 ? (
+            <>
+                <div class="article-grid">
+                    {articles.map((article) => (
+                        <ArticleCard
+                            title={article.title}
+                            slug={article.slug.current}
+                            category={article.category}
+                            image={
+                                article.mainImage
+                                    ? urlFor(article.mainImage)
+                                          .width(800)
+                                          .height(600)
+                                          .url()
+                                    : undefined
+                            }
+                            excerpt={article.excerpt}
+                            tags={article.tags}
+                        />
+                    ))}
+                </div>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    baseUrl={`/tag/${slug}`}
+                />
+            </>
+        ) : (
+            <div class="empty-state">
+                <p>No hay artículos con esta etiqueta.</p>
+            </div>
+        )
+    }
+</Layout>
+
+<style>
+    .tag-header {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: var(--space-md) var(--space-md) 0;
+    }
+
+    .tag-title {
+        font-family: var(--font-display);
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 8rem 2rem;
+        color: var(--color-text-muted);
+    }
+</style>

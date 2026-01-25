@@ -460,6 +460,10 @@ main {
     border-bottom: 1px solid var(--color-border);
 }
 
+.article-card-link {
+    display: contents;
+}
+
 .article-card-image {
     aspect-ratio: 4/3;
     overflow: hidden;
@@ -473,7 +477,8 @@ main {
     transition: transform 0.6s ease;
 }
 
-.article-card:hover .article-card-image img {
+.article-card:hover .article-card-image img,
+.article-card-link:hover .article-card-image img {
     transform: scale(1.03);
 }
 
@@ -525,6 +530,15 @@ main {
     color: var(--color-text-muted);
     background: var(--color-border);
     padding: 0.25rem 0.5rem;
+    text-decoration: none;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.article-card-tag:hover {
+    background: var(--color-text);
+    color: var(--color-bg);
 }
 
 /* Featured article - spans full width on first item */
@@ -794,6 +808,15 @@ main {
     color: var(--color-text-muted);
     background: var(--color-border);
     padding: 0.2rem 0.5rem;
+    text-decoration: none;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.article-tag:hover {
+    background: var(--color-text);
+    color: var(--color-bg);
 }
 
 /* Category Filter */
