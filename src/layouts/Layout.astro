@@ -21,7 +21,7 @@ const articles = rawArticles.map((article: any) => ({
         : null,
 }));
 
-const categories = ["Artículos", "Entrevistas", "Proyectos"];
+const categories = ["Todos", "Artículos", "Entrevistas", "Proyectos"];
 const currentPath = Astro.url.pathname;
 ---
 
@@ -145,7 +145,7 @@ const currentPath = Astro.url.pathname;
             <nav class="site-nav">
                 {
                     categories.map((category) => {
-                        const isAll = category === "Todo";
+                        const isAll = category === "Todos";
                         const isRevista = category === "Revista";
                         const href = isAll
                             ? "/"
@@ -297,5 +297,6 @@ const currentPath = Astro.url.pathname;
         display: flex;
         align-items: center;
         gap: 1rem;
+        margin-left: auto;
     }
 </style>
