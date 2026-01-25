@@ -79,7 +79,8 @@ export async function getArticle(slug: string) {
       category,
       mainImage,
       gallery,
-      "author": author->{name, image}
+      "author": author->{name, image},
+      "tags": tags[]->{ title, slug }
     }
   `,
     { slug },

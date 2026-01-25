@@ -779,6 +779,23 @@ main {
     text-decoration: underline;
 }
 
+.article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: flex-end;
+    margin-top: var(--space-sm);
+}
+
+.article-tag {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    background: var(--color-border);
+    padding: 0.2rem 0.5rem;
+}
+
 /* Category Filter */
 .category-filter {
     display: flex;

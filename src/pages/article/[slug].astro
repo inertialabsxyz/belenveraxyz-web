@@ -129,6 +129,15 @@ const bodyHtml = article.body
                     <p class="article-excerpt">{article.excerpt}</p>
                 )
             }
+            {
+                article.tags && article.tags.length > 0 && (
+                    <div class="article-tags">
+                        {article.tags.map((tag: { title: string }) => (
+                            <span class="article-tag">{tag.title}</span>
+                        ))}
+                    </div>
+                )
+            }
         </header>
 
         <div class="article-hero">
