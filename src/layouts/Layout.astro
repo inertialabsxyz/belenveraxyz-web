@@ -1,0 +1,313 @@
+---
+import "../styles/global.css";
+import Analytics from "@vercel/analytics/astro";
+import SearchModal from "../components/SearchModal.astro";
+import { getArticles, urlFor } from "../lib/sanity";
+
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+const { title = "Efímera", description = "Espacio de arte contemporáneo " } =
+    Astro.props;
+
+const isStaging = import.meta.env.PUBLIC_STAGING === "true";
+const rawArticles = await getArticles();
+const articles = rawArticles.map((article: any) => ({
+    ...article,
+    imageUrl: article.mainImage
+        ? urlFor(article.mainImage).width(120).height(80).url()
+        : null,
+}));
+
+const categories = [
+    "Efímera",
+    "Exposiciones",
+    "Actividades",
+    "Artistas",
+    "Entrevistas",
+    "Letras",
+    "Música",
+    "Revista",
+];
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
+        <title>{title}</title>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    </head>
+    <body>
+        {isStaging && <div class="staging-banner">STAGING</div>}
+        <header class="site-header">
+            <a href="/" class="site-logo">
+                <img src="/efimera-logo.svg" alt="Efímera" />
+            </a>
+
+            <div class="header-actions">
+                <button
+                    id="search-button"
+                    class="search-button"
+                    aria-label="Buscar"
+                >
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                </button>
+                <a href="mailto:info@efimera.xyz" aria-label="Email">
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                        <path d="M22 6L12 13L2 6"></path>
+                    </svg>
+                </a>
+                <a
+                    href="https://www.instagram.com/_efimera_espacio_de_arte/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                >
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"
+                        ></rect>
+                        <path
+                            d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                        ></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+                <a
+                    href="https://www.linkedin.com/company/ef%C3%ADmera/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                >
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path
+                            d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                        ></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                </a>
+            </div>
+
+            <button
+                class="menu-toggle"
+                aria-label="Toggle menu"
+                aria-expanded="false"
+            >
+                <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                >
+                    <line x1="4" y1="7" x2="20" y2="7"></line>
+                    <line x1="4" y1="12" x2="20" y2="12"></line>
+                    <line x1="4" y1="17" x2="20" y2="17"></line>
+                </svg>
+            </button>
+
+            <nav class="site-nav">
+                {
+                    categories.map((category) => {
+                        const isAll = category === "Efímera";
+                        const isRevista = category === "Revista";
+                        const href = isAll
+                            ? "/"
+                            : isRevista
+                              ? "/revista"
+                              : `/category/${category.toLowerCase()}`;
+                        const isActive = isAll
+                            ? currentPath === "/"
+                            : isRevista
+                              ? currentPath === "/revista"
+                              : currentPath.includes(category.toLowerCase());
+                        return (
+                            <a href={href} class:list={[{ active: isActive }]}>
+                                {category}
+                            </a>
+                        );
+                    })
+                }
+                <div class="nav-social">
+                    <a href="mailto:info@efimera.xyz" aria-label="Email">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect x="2" y="4" width="20" height="16" rx="2"
+                            ></rect>
+                            <path d="M22 6L12 13L2 6"></path>
+                        </svg>
+                    </a>
+                    <a
+                        href="https://www.instagram.com/_efimera_espacio_de_arte/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Instagram"
+                    >
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect
+                                x="2"
+                                y="2"
+                                width="20"
+                                height="20"
+                                rx="5"
+                                ry="5"></rect>
+                            <path
+                                d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                            ></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a
+                        href="https://www.linkedin.com/company/ef%C3%ADmera/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LinkedIn"
+                    >
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                            ></path>
+                            <rect x="2" y="9" width="4" height="12"></rect>
+                            <circle cx="4" cy="4" r="2"></circle>
+                        </svg>
+                    </a>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <slot />
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-links">
+                <a href="/about">Acerca de</a>
+                <a href="/contact">Contacto</a>
+                <a href="/privacy">Privacidad</a>
+                <a href="/prensa">Prensa</a>
+            </div>
+            <p class="footer-copyright">
+                © {new Date().getFullYear()} Efímera
+            </p>
+        </footer>
+
+        <SearchModal articles={articles} />
+
+        <script>
+            // Mobile menu toggle
+            const menuToggle = document.querySelector(".menu-toggle");
+            const nav = document.querySelector(".site-nav");
+
+            menuToggle?.addEventListener("click", () => {
+                const isOpen = nav?.classList.toggle("open");
+                menuToggle.setAttribute("aria-expanded", String(isOpen));
+            });
+
+            // Search button
+            const searchButton = document.getElementById("search-button");
+            searchButton?.addEventListener("click", () => {
+                if (typeof window.openSearchModal === "function") {
+                    window.openSearchModal();
+                }
+            });
+        </script>
+        <Analytics />
+    </body>
+</html>
+
+<style>
+    .search-button {
+        background: none;
+        border: none;
+        color: var(--color-text);
+        cursor: pointer;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s ease;
+    }
+
+    .search-button:hover {
+        color: var(--color-text-muted);
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+</style>

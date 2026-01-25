@@ -1,0 +1,304 @@
+---
+import { urlFor } from "../lib/sanity";
+
+interface Slide {
+    _type: string;
+    image?: any;
+    title?: string;
+    excerpt?: string;
+    displayWidth?: number;
+    displayHeight?: number;
+    article?: {
+        _id: string;
+        title: string;
+        slug: { current: string };
+        excerpt?: string;
+    };
+    revista?: {
+        _id: string;
+        title: string;
+        coverImage: any;
+        excerpt?: string;
+        pdfUrl: string;
+    };
+}
+
+interface Props {
+    slides: Slide[];
+}
+
+const { slides } = Astro.props;
+
+if (!slides || slides.length === 0) {
+    return null;
+}
+
+const hasMultipleSlides = slides.length > 1;
+
+// Prepare slides with resolved titles/excerpts
+const preparedSlides = slides.map((slide) => {
+    const isRevista = slide._type === "revistaSlide";
+
+    if (isRevista && slide.revista) {
+        return {
+            imageUrl: urlFor(slide.revista.coverImage).url(),
+            alt: slide.revista.coverImage?.alt || slide.revista.title,
+            title: slide.revista.title,
+            excerpt: null,
+            href: slide.revista.pdfUrl,
+            isExternal: true,
+            displayWidth: slide.displayWidth || 800,
+            displayHeight: slide.displayHeight || 600,
+        };
+    }
+
+    return {
+        imageUrl: slide.image ? urlFor(slide.image).url() : "",
+        alt:
+            slide.image?.alt ||
+            slide.title ||
+            slide.article?.title ||
+            "Featured image",
+        title: slide.title || slide.article?.title,
+        excerpt: slide.excerpt || slide.article?.excerpt,
+        href: slide.article?.slug?.current
+            ? `/article/${slide.article.slug.current}`
+            : null,
+        isExternal: false,
+        displayWidth: slide.displayWidth,
+        displayHeight: slide.displayHeight,
+    };
+});
+---
+
+<div class="featured-gallery-wrapper">
+    <div class="featured-gallery" data-gallery>
+        <div class="featured-gallery-track" data-gallery-track>
+            {
+                preparedSlides.map((slide, index) => (
+                    <div class="featured-gallery-slide" data-index={index}>
+                        {slide.href ? (
+                            <a
+                                href={slide.href}
+                                class="featured-gallery-link"
+                                target={slide.isExternal ? "_blank" : undefined}
+                                rel={
+                                    slide.isExternal
+                                        ? "noopener noreferrer"
+                                        : undefined
+                                }
+                            >
+                                <img
+                                    src={slide.imageUrl}
+                                    alt={slide.alt}
+                                    style={
+                                        slide.displayWidth ||
+                                        slide.displayHeight
+                                            ? `${slide.displayWidth ? `width: ${slide.displayWidth}px;` : ""} ${slide.displayHeight ? `height: ${slide.displayHeight}px;` : ""}`
+                                            : undefined
+                                    }
+                                />
+                            </a>
+                        ) : (
+                            <img
+                                src={slide.imageUrl}
+                                alt={slide.alt}
+                                style={
+                                    slide.displayWidth || slide.displayHeight
+                                        ? `${slide.displayWidth ? `width: ${slide.displayWidth}px;` : ""} ${slide.displayHeight ? `height: ${slide.displayHeight}px;` : ""}`
+                                        : undefined
+                                }
+                            />
+                        )}
+                    </div>
+                ))
+            }
+        </div>
+
+        {
+            hasMultipleSlides && (
+                <>
+                    <button
+                        class="featured-gallery-btn featured-gallery-btn-prev"
+                        data-gallery-prev
+                        aria-label="Previous slide"
+                    >
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                        >
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </button>
+                    <button
+                        class="featured-gallery-btn featured-gallery-btn-next"
+                        data-gallery-next
+                        aria-label="Next slide"
+                    >
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                        >
+                            <polyline points="9 6 15 12 9 18" />
+                        </svg>
+                    </button>
+
+                    <div
+                        class="featured-gallery-indicators"
+                        data-gallery-indicators
+                    >
+                        {preparedSlides.map((_, index) => (
+                            <button
+                                class:list={[
+                                    "featured-gallery-indicator",
+                                    { active: index === 0 },
+                                ]}
+                                data-index={index}
+                                aria-label={`Go to slide ${index + 1}`}
+                            />
+                        ))}
+                    </div>
+                </>
+            )
+        }
+    </div>
+
+    <div class="featured-gallery-captions" data-gallery-captions>
+        {
+            preparedSlides.map((slide, index) => (
+                <div
+                    class:list={[
+                        "featured-gallery-caption",
+                        { active: index === 0 },
+                    ]}
+                    data-caption-index={index}
+                >
+                    {slide.title && (
+                        <h2 class="featured-gallery-title">{slide.title}</h2>
+                    )}
+                </div>
+            ))
+        }
+    </div>
+</div>
+
+<script>
+    function initGallery(wrapper: HTMLElement) {
+        const gallery = wrapper.querySelector("[data-gallery]") as HTMLElement;
+        const track = wrapper.querySelector(
+            "[data-gallery-track]",
+        ) as HTMLElement;
+        const slides = wrapper.querySelectorAll(".featured-gallery-slide");
+        const prevBtn = wrapper.querySelector("[data-gallery-prev]");
+        const nextBtn = wrapper.querySelector("[data-gallery-next]");
+        const indicators = wrapper.querySelectorAll(
+            ".featured-gallery-indicator",
+        );
+        const captions = wrapper.querySelectorAll(".featured-gallery-caption");
+
+        if (!track || slides.length === 0) return;
+
+        let currentIndex = 0;
+        const totalSlides = slides.length;
+
+        function goToSlide(index: number) {
+            if (index < 0) index = totalSlides - 1;
+            if (index >= totalSlides) index = 0;
+
+            currentIndex = index;
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle("active", i === currentIndex);
+            });
+
+            captions.forEach((caption, i) => {
+                caption.classList.toggle("active", i === currentIndex);
+            });
+        }
+
+        // Auto-rotate timer
+        let autoRotateInterval: number | null = null;
+
+        function startAutoRotate() {
+            if (totalSlides <= 1) return;
+            autoRotateInterval = window.setInterval(() => {
+                goToSlide(currentIndex + 1);
+            }, 8000);
+        }
+
+        function resetAutoRotate() {
+            if (autoRotateInterval) {
+                clearInterval(autoRotateInterval);
+            }
+            startAutoRotate();
+        }
+
+        startAutoRotate();
+
+        prevBtn?.addEventListener("click", () => {
+            goToSlide(currentIndex - 1);
+            resetAutoRotate();
+        });
+        nextBtn?.addEventListener("click", () => {
+            goToSlide(currentIndex + 1);
+            resetAutoRotate();
+        });
+
+        indicators.forEach((indicator) => {
+            indicator.addEventListener("click", () => {
+                const index = parseInt(
+                    indicator.getAttribute("data-index") || "0",
+                );
+                goToSlide(index);
+                resetAutoRotate();
+            });
+        });
+
+        // Keyboard navigation
+        gallery.addEventListener("keydown", (e: KeyboardEvent) => {
+            if (e.key === "ArrowLeft") goToSlide(currentIndex - 1);
+            if (e.key === "ArrowRight") goToSlide(currentIndex + 1);
+        });
+
+        // Touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        gallery.addEventListener(
+            "touchstart",
+            (e: TouchEvent) => {
+                touchStartX = e.changedTouches[0].screenX;
+            },
+            { passive: true },
+        );
+
+        gallery.addEventListener(
+            "touchend",
+            (e: TouchEvent) => {
+                touchEndX = e.changedTouches[0].screenX;
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) goToSlide(currentIndex + 1);
+                    else goToSlide(currentIndex - 1);
+                }
+            },
+            { passive: true },
+        );
+    }
+
+    // Initialize all galleries on the page
+    document
+        .querySelectorAll(".featured-gallery-wrapper")
+        .forEach((wrapper) => {
+            initGallery(wrapper as HTMLElement);
+        });
+</script>

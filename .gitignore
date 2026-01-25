@@ -1,0 +1,7 @@
+node_modules
+.astro
+.sanity
+dist
+.vercel
+.env
+sanity.cli.ts

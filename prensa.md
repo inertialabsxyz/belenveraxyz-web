@@ -1,0 +1,1 @@
+This is a new feature. Look at revistas. We have a section in the website that allows us to upload a pdf, set a title, an excerpt and a cover image. Let's copy how the revista section works. The only difference here would be that the link to this section in the website would be in the footer and titled "Prensa"

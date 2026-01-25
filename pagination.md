@@ -1,0 +1,1 @@
+This is a new feature. On the index page of the website we don't limit the number of articles that are listed. This needs to be limited to 10 articles and that there is a pagination control to pass to the next 10 articles if there are more than 10 articles in the category.

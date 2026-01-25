@@ -1,0 +1,61 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import FeaturedGallery from "../components/FeaturedGallery.astro";
+import Pagination from "../components/Pagination.astro";
+import {
+    getArticlesPaginated,
+    getFeaturedGallery,
+    urlFor,
+} from "../lib/sanity";
+
+const pageParam = Astro.url.searchParams.get("page");
+const currentPage = Math.max(1, parseInt(pageParam || "1", 10) || 1);
+
+const { articles, totalPages } = await getArticlesPaginated(currentPage, 10);
+const featuredGallery = await getFeaturedGallery();
+
+const categories = [
+    "Todos",
+    "Actividades",
+    "Artistas",
+    "Exposiciones",
+    "Letras",
+    "Música",
+    "Revista",
+];
+---
+
+<Layout title="Efímera">
+    {
+        featuredGallery?.slides && featuredGallery.slides.length > 0 && (
+            <>
+                <FeaturedGallery slides={featuredGallery.slides} />
+                <hr class="gallery-divider" />
+            </>
+        )
+    }
+
+    <div class="article-grid">
+        {
+            articles.map((article) => (
+                <ArticleCard
+                    title={article.title}
+                    slug={article.slug.current}
+                    category={article.category}
+                    image={
+                        article.mainImage
+                            ? urlFor(article.mainImage)
+                                  .width(800)
+                                  .height(600)
+                                  .url()
+                            : undefined
+                    }
+                    excerpt={article.excerpt}
+                />
+            ))
+        }
+    </div>
+
+    <Pagination currentPage={currentPage} totalPages={totalPages} baseUrl="/" />
+</Layout>
