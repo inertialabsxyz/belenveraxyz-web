@@ -1,41 +1,27 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ImageCarousel from "../components/ImageCarousel.astro";
-
-const aboutImages = [
-    { url: "/about/EFIMERA-1 ESPACIOS X_Z.jpg", alt: "Efímera espacio X_Z" },
-    { url: "/about/EFIMERA-28.jpg", alt: "Efímera espacio" },
-    { url: "/about/EFIMERA-3 SPACIO Y.jpg", alt: "Efímera espacio Y" },
-    { url: "/about/EFIMERA-7. ESPACIO Y_Z.jpg", alt: "Efímera espacio Y_Z" },
-    {
-        url: "/about/PLANO.jpg",
-        alt: "Plano del espacio",
-    },
-];
 ---
 
-<Layout title="Acerca de | Efímera" description="Acerca de Efímera">
+<Layout title="Sobre mí" description="Sobre mí">
     <div class="page-content">
-        <h1>Acerca de</h1>
-        <p>
-            Efímera es un proyecto expositivo y editorial dedicado a visibilizar
-            las prácticas y debates del arte contemporáneo actual. A través de
-            exposiciones, actividades y la revista XYZ, reúne artistas locales y
-            propuestas desarrolladas en otros contextos, reflejando nuevas
-            tendencias y formas de pensar el presente.
-        </p>
-        <p>
-            Fundado y dirigido por Belén Vera, Efímera funciona como un espacio
-            de encuentro, investigación y difusión crítica del arte
-            contemporáneo.
-        </p>
-
-        <div class="about-gallery">
-            <ImageCarousel
-                images={aboutImages}
-                articleTitle="Efímera espacio"
+        <h1>Sobre mí</h1>
+        <div class="about-content">
+            <img
+                src="/Belen-Vera-Raya-bn.jpg"
+                alt="Belén Vera Raya"
+                class="about-image"
             />
-            <p class="gallery-credit">Imagenes Paula Cano Vera</p>
+            <p>
+                Licenciada en Cultura Europea y Francés, con formación en
+                Publicidad, me dedico a investigar y difundir el mundo cultural
+                a través de artículos, entrevistas y exposiciones. Mis intereses
+                se centran en el arte contemporáneo, especialmente en la
+                intersección entre arte, tecnología y ecología. Impulsada por
+                una constante curiosidad, actualmente profundizo en cómo el arte
+                refleja la conciencia ambiental. Mi objetivo es encontrar nuevas
+                formas creativas que nutran mi pasión por la cultura emergente y
+                aporten soluciones innovadoras a los desafíos del mundo actual.
+            </p>
         </div>
 
         <div class="contact-section">
@@ -105,20 +91,37 @@ const aboutImages = [
                 </a>
             </div>
         </div>
-
-        <div class="location-section">
-            <h2>Ubicación</h2>
-            <p>C/ Mariano Vergara, 25, Bajo, Murcia</p>
-            <p class="note">Cita previa para visitas guiadas</p>
-        </div>
     </div>
 </Layout>
 
 <style>
     .page-content {
-        max-width: 680px;
+        max-width: 900px;
         margin: 0 auto;
         padding: var(--space-sm) var(--space-md);
+    }
+
+    .about-content {
+        display: flex;
+        gap: var(--space-md);
+        align-items: flex-start;
+    }
+
+    .about-image {
+        width: 240px;
+        height: auto;
+        flex-shrink: 0;
+    }
+
+    @media (max-width: 768px) {
+        .about-content {
+            flex-direction: column;
+        }
+
+        .about-image {
+            width: 100%;
+            max-width: 240px;
+        }
     }
 
     h1 {
