@@ -9,7 +9,7 @@ interface Props {
     description?: string;
 }
 
-const { title = "Efímera", description = "Espacio de arte contemporáneo " } =
+const { title = "Belén Vera", description = "Espacio de arte contemporáneo " } =
     Astro.props;
 
 const isStaging = import.meta.env.PUBLIC_STAGING === "true";
@@ -21,13 +21,7 @@ const articles = rawArticles.map((article: any) => ({
         : null,
 }));
 
-const categories = [
-    "Todo",
-    "Artículos",
-    "Entrevistas",
-    "Proyectos",
-    "Revista",
-];
+const categories = ["Todo", "Artículos", "Entrevistas", "Proyectos", "Revista"];
 const currentPath = Astro.url.pathname;
 ---
 
@@ -43,9 +37,7 @@ const currentPath = Astro.url.pathname;
     <body>
         {isStaging && <div class="staging-banner">STAGING</div>}
         <header class="site-header">
-            <a href="/" class="site-logo">
-                <img src="/efimera-logo.svg" alt="Efímera" />
-            </a>
+            <a href="/" class="site-logo">Belén Vera</a>
 
             <div class="header-actions">
                 <button
@@ -256,7 +248,7 @@ const currentPath = Astro.url.pathname;
                 <a href="/privacy">Privacidad</a>
             </div>
             <p class="footer-copyright">
-                © {new Date().getFullYear()} Efímera
+                © {new Date().getFullYear()} Belén Vera
             </p>
         </footer>
 
