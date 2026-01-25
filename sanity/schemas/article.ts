@@ -73,12 +73,9 @@ export default {
       type: "string",
       options: {
         list: [
-          { title: "Actividades", value: "Actividades" },
-          { title: "Artistas", value: "Artistas" },
+          { title: "Artículos", value: "Artículos" },
           { title: "Entrevistas", value: "Entrevistas" },
-          { title: "Exposiciones", value: "Exposiciones" },
-          { title: "Letras", value: "Letras" },
-          { title: "Música", value: "Música" },
+          { title: "Proyectos", value: "Proyectos" },
         ],
       },
       validation: (Rule) => Rule.required(),
@@ -168,18 +165,6 @@ export default {
           ],
         },
       ],
-    },
-    {
-      name: "relatedArticles",
-      title: "Related Articles",
-      type: "array",
-      of: [
-        {
-          type: "reference",
-          to: [{ type: "article" }],
-        },
-      ],
-      description: "Select articles to display as related content.",
     },
   ],
   preview: {

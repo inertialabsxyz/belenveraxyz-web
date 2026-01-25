@@ -22,13 +22,10 @@ const articles = rawArticles.map((article: any) => ({
 }));
 
 const categories = [
-    "Efímera",
-    "Exposiciones",
-    "Actividades",
-    "Artistas",
+    "Todo",
+    "Artículos",
     "Entrevistas",
-    "Letras",
-    "Música",
+    "Proyectos",
     "Revista",
 ];
 const currentPath = Astro.url.pathname;
@@ -156,7 +153,7 @@ const currentPath = Astro.url.pathname;
             <nav class="site-nav">
                 {
                     categories.map((category) => {
-                        const isAll = category === "Efímera";
+                        const isAll = category === "Todo";
                         const isRevista = category === "Revista";
                         const href = isAll
                             ? "/"
@@ -257,7 +254,6 @@ const currentPath = Astro.url.pathname;
                 <a href="/about">Acerca de</a>
                 <a href="/contact">Contacto</a>
                 <a href="/privacy">Privacidad</a>
-                <a href="/prensa">Prensa</a>
             </div>
             <p class="footer-copyright">
                 © {new Date().getFullYear()} Efímera

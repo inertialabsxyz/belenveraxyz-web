@@ -78,15 +78,7 @@ export async function getArticle(slug: string) {
       category,
       mainImage,
       gallery,
-      "author": author->{name, image},
-      "relatedArticles": relatedArticles[]->{
-        _id,
-        title,
-        slug,
-        excerpt,
-        mainImage,
-        category
-      }
+      "author": author->{name, image}
     }
   `,
     { slug },
@@ -166,20 +158,6 @@ export async function getRevistas() {
       excerpt,
       publishedAt,
       "pdfUrl": pdf.asset->url
-    }
-  `);
-}
-
-export async function getPrensa() {
-  return client.fetch(`
-    *[_type == "prensa"] | order(publishedAt desc) {
-      _id,
-      title,
-      slug,
-      coverImage,
-      excerpt,
-      publishedAt,
-      "zipUrl": zipFile.asset->url
     }
   `);
 }
