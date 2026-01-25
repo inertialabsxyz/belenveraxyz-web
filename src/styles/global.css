@@ -241,6 +241,10 @@ p {
         display: none;
     }
 
+    .header-actions {
+        display: none;
+    }
+
     .menu-toggle {
         display: block;
         margin-left: auto;
