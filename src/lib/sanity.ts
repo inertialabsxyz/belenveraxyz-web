@@ -48,7 +48,8 @@ export async function getArticlesPaginated(
         publishedAt,
         category,
         mainImage,
-        "author": author->name
+        "author": author->name,
+        "tags": tags[]->{ title, slug }
       }
     `,
       { start, end },

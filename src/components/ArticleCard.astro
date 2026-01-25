@@ -1,6 +1,11 @@
 ---
 import { Image } from "astro:assets";
 
+interface Tag {
+    title: string;
+    slug: { current: string };
+}
+
 interface Props {
     title: string;
     slug: string;
@@ -8,9 +13,18 @@ interface Props {
     image?: string;
     excerpt?: string;
     featured?: boolean;
+    tags?: Tag[];
 }
 
-const { title, slug, category, image, excerpt, featured = false } = Astro.props;
+const {
+    title,
+    slug,
+    category,
+    image,
+    excerpt,
+    featured = false,
+    tags = [],
+} = Astro.props;
 
 // Placeholder image if none provided
 const imageUrl = image || `https://picsum.photos/seed/${slug}/800/600`;
@@ -31,5 +45,14 @@ const imageUrl = image || `https://picsum.photos/seed/${slug}/800/600`;
     <div class="article-card-content">
         <h2 class="article-card-title">{title}</h2>
         {excerpt && <p class="article-card-excerpt">{excerpt}</p>}
+        {
+            tags && tags.length > 0 && (
+                <div class="article-card-tags">
+                    {tags.map((tag) => (
+                        <span class="article-card-tag">{tag.title}</span>
+                    ))}
+                </div>
+            )
+        }
     </div>
 </a>

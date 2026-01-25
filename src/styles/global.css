@@ -510,6 +510,23 @@ main {
     overflow: hidden;
 }
 
+.article-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    margin-top: var(--space-sm);
+}
+
+.article-card-tag {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    background: var(--color-border);
+    padding: 0.25rem 0.5rem;
+}
+
 /* Featured article - spans full width on first item */
 .article-card.featured {
     grid-column: 1 / -1;
