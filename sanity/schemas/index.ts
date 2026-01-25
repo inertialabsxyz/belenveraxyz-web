@@ -1,6 +1,6 @@
 import article from "./article";
 import author from "./author";
 import featuredGallery from "./featuredGallery";
-import revista from "./revista";
+import tag from "./tag";
 
-export const schemaTypes = [article, author, featuredGallery, revista];
+export const schemaTypes = [article, author, featuredGallery, tag];

@@ -81,6 +81,17 @@ export default {
       validation: (Rule) => Rule.required(),
     },
     {
+      name: "tags",
+      title: "Tags",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "tag" }],
+        },
+      ],
+    },
+    {
       name: "excerpt",
       title: "Excerpt",
       type: "text",

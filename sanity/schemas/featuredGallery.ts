@@ -80,45 +80,6 @@ export default {
             },
           },
         },
-        {
-          type: "object",
-          name: "revistaSlide",
-          title: "Revista Slide",
-          fields: [
-            {
-              name: "revista",
-              title: "Revista",
-              type: "reference",
-              to: [{ type: "revista" }],
-              validation: (Rule) => Rule.required(),
-            },
-            {
-              name: "displayWidth",
-              title: "Display Width (px)",
-              type: "number",
-              description: "Optional: Set a custom display width in pixels",
-            },
-            {
-              name: "displayHeight",
-              title: "Display Height (px)",
-              type: "number",
-              description: "Optional: Set a custom display height in pixels",
-            },
-          ],
-          preview: {
-            select: {
-              title: "revista.title",
-              media: "revista.coverImage",
-            },
-            prepare({ title, media }) {
-              return {
-                title: title || "Revista Slide",
-                subtitle: "Revista PDF",
-                media,
-              };
-            },
-          },
-        },
       ],
       validation: (Rule) => Rule.min(1).error("Add at least one slide"),
     },
