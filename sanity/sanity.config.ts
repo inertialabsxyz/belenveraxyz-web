@@ -5,10 +5,10 @@ import { schemaTypes } from "./schemas";
 
 export default defineConfig({
   name: "default",
-  title: "Efimera Revista",
+  title: "Belenvera XYZ",
 
-  projectId: "msziqj4u",
-  dataset: "efimera-data",
+  projectId: "nmhs4wrb",
+  dataset: "production",
 
   plugins: [structureTool(), visionTool()],
 
