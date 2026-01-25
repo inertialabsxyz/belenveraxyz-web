@@ -7,7 +7,7 @@ import { getRevistas, urlFor } from "../lib/sanity";
 const revistas = await getRevistas();
 ---
 
-<Layout title="Revista — Efímera">
+<Layout title="Revista">
     {
         revistas && revistas.length > 0 ? (
             <div class="revista-grid">
