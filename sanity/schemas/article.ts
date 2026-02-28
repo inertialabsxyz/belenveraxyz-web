@@ -106,6 +106,15 @@ export default {
       initialValue: () => new Date().toISOString(),
     },
     {
+      name: "pdf",
+      title: "PDF Version",
+      type: "file",
+      options: {
+        accept: ".pdf",
+      },
+      description: "Optional PDF version of this article available for download.",
+    },
+    {
       name: "body",
       title: "Body",
       type: "array",

@@ -80,7 +80,8 @@ export async function getArticle(slug: string) {
       mainImage,
       gallery,
       "author": author->{name, image},
-      "tags": tags[]->{ title, slug }
+      "tags": tags[]->{ title, slug },
+      "pdfUrl": pdf.asset->url
     }
   `,
     { slug },

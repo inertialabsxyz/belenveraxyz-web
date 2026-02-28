@@ -777,6 +777,10 @@ main {
     padding: var(--space-xs) var(--space-md) var(--space-sm);
 }
 
+.article-download + .article-content {
+    padding-top: 0;
+}
+
 .article-content p {
     margin-bottom: 1.5em;
 }
@@ -806,6 +810,35 @@ main {
 
 .article-content a {
     text-decoration: underline;
+}
+
+/* Article Download */
+.article-download {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-sm) var(--space-md) 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.article-download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 1rem;
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.article-download-link:hover {
+    color: var(--color-text);
+    border-color: var(--color-text);
 }
 
 .article-tags {
